@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Text } from 'react-native'
 import styled from 'styled-components/native'
+import { TabNavigator } from 'react-navigation'
+import DeckListView from './components/DeckListView'
 
 const Container = styled.View`
   flex: 1;
@@ -9,21 +11,31 @@ const Container = styled.View`
   justify-content: center;
 `
 
+const NewDeck = () => (
+  <Container>
+    <Text>This is a second contained text</Text>
+  </Container>
+)
+
+const Tabs = TabNavigator({
+  Decks: {
+    screen: DeckListView,
+    navigationOptions: {
+      tabBarLabel: 'List of Decks',
+    },
+  },
+  NewDeck: {
+    screen: NewDeck,
+    navigationOptions: {
+      tabBarLabel: 'Add New Deck',
+    },
+  },
+})
+
 class App extends Component {
-  state = {
-    name: 'test',
-  }
-
   render() {
-    const { name } = this.state
-
     return (
-      <Container>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-        <Text>{name}</Text>
-      </Container>
+      <Tabs />
     )
   }
 }
