@@ -19,7 +19,7 @@ const Deck = styled.View`
   padding: 40px 0;
   shadow-color: #000;
   shadow-offset: 2px 2px;
-  shadow-opacity: 0.2;
+  shadow-opacity: 0.4;
   shadow-radius: 2;
 `
 
@@ -36,15 +36,21 @@ const DeckCardsNumber = styled.Text`
 class DeckListView extends Component {
   state = {
     data: [
-      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 0 },
+      { title: 'first deck title', cardnumber: 2, key: 0 },
       { title: 'SECOND DECK TITLE', cardnumber: 0, key: 1 },
+      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 2 },
+      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 3 },
+      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 4 },
+      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 5 },
+      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 6 },
+      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 7 },
     ],
   }
 
   renderDeck = ({ item }) => (
     <Deck key={item.key}>
-      <DeckTitle>{item.title}</DeckTitle>
-      <DeckCardsNumber>{`deck card number is ${item.cardnumber}`}</DeckCardsNumber>
+      <DeckTitle>{item.title.toUpperCase()}</DeckTitle>
+      <DeckCardsNumber>{`DECK CARD NUMBER IS ${item.cardnumber}`}</DeckCardsNumber>
     </Deck>
   )
 
