@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
+import { gray } from '../utils/colors'
 
-const DeckContainer = styled.ScrollView`
+const DeckContainer = styled.FlatList`
   flex: 1;
   padding: 20px 0 20px 0;
 `
@@ -29,26 +30,32 @@ const DeckTitle = styled.Text`
 
 const DeckCardsNumber = styled.Text`
   font-size: 18px;
-  color: #CCC;
+  color: ${gray};
 `
 
 class DeckListView extends Component {
+  state = {
+    data: [
+      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 0 },
+      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 1 },
+    ],
+  }
+
+  renderDeck = ({ item }) => (
+    <Deck key={item.key}>
+      <DeckTitle>{item.title}</DeckTitle>
+      <DeckCardsNumber>{`deck card number is ${item.cardnumber}`}</DeckCardsNumber>
+    </Deck>
+  )
+
   render() {
+    const { data } = this.state
+
     return (
-      <DeckContainer>
-        <Deck>
-          <DeckTitle>DECK TITLE</DeckTitle>
-          <DeckCardsNumber>Number of Deck Cards</DeckCardsNumber>
-        </Deck>
-        <Deck>
-          <DeckTitle>DECK TITLE</DeckTitle>
-          <DeckCardsNumber>Number of Deck Cards</DeckCardsNumber>
-        </Deck>
-        <Deck>
-          <DeckTitle>DECK TITLE</DeckTitle>
-          <DeckCardsNumber>Number of Deck Cards</DeckCardsNumber>
-        </Deck>
-      </DeckContainer>
+      <DeckContainer
+        data={data}
+        renderItem={this.renderDeck}
+      />
     )
   }
 }
