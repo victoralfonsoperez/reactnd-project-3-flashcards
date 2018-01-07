@@ -1,26 +1,27 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { gray } from '../utils/colors'
+import { white, gray, lightblue, darkgreen } from '../utils/colors'
 
 const DeckContainer = styled.FlatList`
   flex: 1;
-  padding: 20px 0 20px 0;
+  padding: 20px 0 40px 0;
+  background-color: ${gray};
 `
 
 const Deck = styled.View`
   align-items: center;  
   flex: 1;
-  background-color: #FFF;
-  border: 2px solid #CCC;
+  background-color: ${white};
+  border: 1px solid ${gray};
   border-radius: 10px;
-  height: 100px;
+  height: 25%;
   justify-content: center;
   margin: 5px;
   padding: 40px 0;
-  shadow-color: #000;
+  shadow-color: ${lightblue};
   shadow-offset: 2px 2px;
-  shadow-opacity: 0.4;
-  shadow-radius: 2;
+  shadow-opacity: 0.2;
+  shadow-radius: 3;
 `
 
 const DeckTitle = styled.Text`
@@ -30,7 +31,7 @@ const DeckTitle = styled.Text`
 
 const DeckCardsNumber = styled.Text`
   font-size: 18px;
-  color: ${gray};
+  color: ${darkgreen};
 `
 
 class DeckListView extends Component {

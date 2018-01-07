@@ -1,7 +1,22 @@
 import React, { Component } from 'react'
 import { TabNavigator } from 'react-navigation'
+import { View, StatusBar } from 'react-native'
+import { Constants } from 'expo'
+import styled from 'styled-components/native'
 import DeckListView from './components/DeckListView'
 import NewDeckView from './components/NewDeckView'
+import { blue } from './utils/colors'
+
+const CustomStatusBar = styled.View`
+  backgroundColor: ${blue};
+  height: ${Constants.statusBarHeight};
+`
+
+const FlashCardsStatusBar = () => (
+  <CustomStatusBar>
+    <StatusBar translucent barStyle="light-content" />
+  </CustomStatusBar>
+)
 
 const Tabs = TabNavigator({
   Decks: {
@@ -21,7 +36,10 @@ const Tabs = TabNavigator({
 class App extends Component {
   render() {
     return (
-      <Tabs />
+      <View style={{ flex: 1 }}>
+        <FlashCardsStatusBar />
+        <Tabs />
+      </View>
     )
   }
 }
