@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 import { Text, TextInput, Platform } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { green, white, blue, lightblue } from '../utils/colors'
+import { green, white, blue, lightblue, gray } from '../utils/colors'
 import * as actions from '../actions'
 import { saveDeckTitle, getDecks } from '../utils/helpers'
 
@@ -26,23 +26,23 @@ const SubmitBtn = styled.TouchableOpacity`
 
 class DeckListView extends Component {
   state ={
-    text: 'no text',
+    text: '',
   }
 
   submitDeck() {
     const { text } = this.state
-
+    //removes whitespaces
     const obj = {
-      title: text,
+      title: text.replace(/\s/g, ''),
       questions: [],
     }
-
+    //clears the imput once you click the button
+    this._textInput.setNativeProps({ text: '' })
     //updates DB
     saveDeckTitle(text, obj)
-
     //updates redux
     this.props.addDeck(obj)
-
+    //navigates back to the previous page
     this.props.navigation.goBack()
   }
 
@@ -52,6 +52,7 @@ class DeckListView extends Component {
         <Text style={{ fontSize: 24, color: green }}>What is the title of your new deck?</Text>
 
         <TextInput
+          ref={component => this._textInput = component}
           style={
             {
               height: 40,
@@ -64,7 +65,9 @@ class DeckListView extends Component {
               padding: 10,
               fontSize: 16,
             }}
-          required
+          autoFocus
+          placeholderTextColor={gray}
+          placeholder="Deck Title"
           onChangeText={text => this.setState({ text })}
         />
 
@@ -73,8 +76,6 @@ class DeckListView extends Component {
         >
           <Text style={{ color: white }}>SUBMIT</Text>
         </SubmitBtn>
-
-        <Text>{this.state.text}</Text>
       </NewDeck>
     )
   }

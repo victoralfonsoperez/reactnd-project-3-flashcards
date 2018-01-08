@@ -2,58 +2,74 @@ import React, { Component } from 'react'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { View, TouchableOpacity } from 'react-native'
-import { white, gray, lightblue, darkgreen, blue } from '../utils/colors'
-import { setDecks } from '../utils/helpers'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { white, gray, lightblue, darkgreen, blue, black } from '../utils/colors'
+import { setDecks, getDecks } from '../utils/helpers'
+import { fetchDecks } from '../actions'
+
+const styles = StyleSheet.create({
+  deck: {
+    alignItems: 'center',
+    flex: 1,
+    borderWidth: 1,
+    borderColor: gray,
+    backgroundColor: white,
+    borderRadius: 10,
+    height: 120,
+    justifyContent: 'center',
+    margin: 5,
+    paddingTop: 40,
+    paddingBottom: 40,
+    shadowColor: lightblue,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  deckTitle: {
+    color: black,
+    fontSize: 24,
+  },
+  deckCardNumber: {
+    fontSize: 18,
+    color: darkgreen,
+  },
+})
 
 const DeckContainer = styled.FlatList`
   flex: 1;
   padding: 20px 0 40px 0;
   background-color: ${gray};
-  border: 2px solid ${blue};
 `
 
-const Deck = styled.View`
-  align-items: center;  
-  flex: 1;
-  background-color: ${white};
-  border: 1px solid ${gray};
-  border-radius: 10px;
-  height: 120px;
-  justify-content: center;
-  margin: 5px;
-  padding: 40px 0;
-  shadow-color: ${lightblue};
-  shadow-offset: 2px 2px;
-  shadow-opacity: 0.2;
-  shadow-radius: 3;
-`
-
-const DeckTitle = styled.Text`
-  color: #000;
-  font-size: 24px;
-`
-
-const DeckCardsNumber = styled.Text`
-  font-size: 18px;
-  color: ${darkgreen};
-`
+function Item({ title, questions }) {
+  return (
+    <TouchableOpacity key={title}>
+      <View style={styles.deck}>
+        <Text style={styles.deckTitle}>{title.toUpperCase()}</Text>
+        <Text style={styles.deckCardNumber}>
+          {`${questions.length} ${questions.length === 1 ? 'CARD' : 'CARDS'}`}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
+}
 
 class DeckListView extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props
+
+    getDecks()
+      .then(result => JSON.parse(result))
+      .then(result => dispatch(fetchDecks(result)))
+  }
+
   renderDeck = ({ item }) => (
-    <TouchableOpacity>
-      <Deck key={item.key}>
-        <DeckTitle>{item.title.toUpperCase()}</DeckTitle>
-        <DeckCardsNumber>
-          {`${item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
-        </DeckCardsNumber>
-      </Deck>
-    </TouchableOpacity>
+    <Item {...item} />
   )
 
   render() {
     const { decks } = this.props
-    const listDecks = Object.keys(decks).map((key) => {
+    const listDecks = typeof decks === 'object' && Object.keys(decks).map((key) => {
       const { title, questions } = decks[key]
       return {
         title,
@@ -66,7 +82,7 @@ class DeckListView extends Component {
       <View style={{ flex: 1 }}>
         {
         listDecks.length !== 0 &&
-          <View style={{ flex: 1, borderWidth: 2, borderColor: 'black' }}>
+          <View style={{ flex: 1 }}>
             <DeckContainer
               data={listDecks}
               renderItem={this.renderDeck}
