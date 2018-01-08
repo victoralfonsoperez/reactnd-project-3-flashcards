@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
 import { Text, TextInput, Platform } from 'react-native'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { green, white, blue, lightblue } from '../utils/colors'
+import * as actions from '../actions'
+import { saveDeckTitle, getDecks } from '../utils/helpers'
 
 const NewDeck = styled.KeyboardAvoidingView`
   align-items: center;
@@ -21,7 +25,26 @@ const SubmitBtn = styled.TouchableOpacity`
 `
 
 class DeckListView extends Component {
-  state = {}
+  state ={
+    text: 'no text',
+  }
+
+  submitDeck() {
+    const { text } = this.state
+
+    const obj = {
+      title: text,
+      questions: [],
+    }
+
+    //updates DB
+    saveDeckTitle(text, obj)
+
+    //updates redux
+    this.props.addDeck(obj)
+
+    this.props.navigation.goBack()
+  }
 
   render() {
     return (
@@ -41,11 +64,12 @@ class DeckListView extends Component {
               padding: 10,
               fontSize: 16,
             }}
+          required
           onChangeText={text => this.setState({ text })}
         />
 
         <SubmitBtn
-          onPress={() => alert('Button pressed!')}
+          onPress={() => this.submitDeck()}
         >
           <Text style={{ color: white }}>SUBMIT</Text>
         </SubmitBtn>
@@ -56,4 +80,14 @@ class DeckListView extends Component {
   }
 }
 
-export default DeckListView
+function mapStateToProps(state) {
+  return {
+    decks: state,
+  }
+}
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(actions, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckListView)

@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 import { TabNavigator } from 'react-navigation'
 import { View, StatusBar } from 'react-native'
 import { Constants } from 'expo'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import styled from 'styled-components/native'
 import DeckListView from './components/DeckListView'
 import NewDeckView from './components/NewDeckView'
 import { blue } from './utils/colors'
+import reducer from './reducers'
 
 const CustomStatusBar = styled.View`
   backgroundColor: ${blue};
@@ -28,18 +31,22 @@ const Tabs = TabNavigator({
   NewDeckView: {
     screen: NewDeckView,
     navigationOptions: {
-      tabBarLabel: 'Add New Deck',
+      tabBarLabel: 'New Deck',
     },
   },
 })
 
+const store = createStore(reducer)
+
 class App extends Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <FlashCardsStatusBar />
-        <Tabs />
-      </View>
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <FlashCardsStatusBar />
+          <Tabs />
+        </View>
+      </Provider>
     )
   }
 }

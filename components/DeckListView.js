@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { white, gray, lightblue, darkgreen } from '../utils/colors'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { View, TouchableOpacity } from 'react-native'
+import { white, gray, lightblue, darkgreen, blue } from '../utils/colors'
+import { setDecks } from '../utils/helpers'
 
 const DeckContainer = styled.FlatList`
   flex: 1;
   padding: 20px 0 40px 0;
   background-color: ${gray};
+  border: 2px solid ${blue};
 `
 
 const Deck = styled.View`
@@ -14,7 +19,7 @@ const Deck = styled.View`
   background-color: ${white};
   border: 1px solid ${gray};
   border-radius: 10px;
-  height: 25%;
+  height: 120px;
   justify-content: center;
   margin: 5px;
   padding: 40px 0;
@@ -35,36 +40,52 @@ const DeckCardsNumber = styled.Text`
 `
 
 class DeckListView extends Component {
-  state = {
-    data: [
-      { title: 'first deck title', cardnumber: 2, key: 0 },
-      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 1 },
-      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 2 },
-      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 3 },
-      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 4 },
-      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 5 },
-      { title: 'FIRST DECK TITLE', cardnumber: 2, key: 6 },
-      { title: 'SECOND DECK TITLE', cardnumber: 0, key: 7 },
-    ],
-  }
-
   renderDeck = ({ item }) => (
-    <Deck key={item.key}>
-      <DeckTitle>{item.title.toUpperCase()}</DeckTitle>
-      <DeckCardsNumber>{`DECK CARD NUMBER IS ${item.cardnumber}`}</DeckCardsNumber>
-    </Deck>
+    <TouchableOpacity>
+      <Deck key={item.key}>
+        <DeckTitle>{item.title.toUpperCase()}</DeckTitle>
+        <DeckCardsNumber>
+          {`${item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
+        </DeckCardsNumber>
+      </Deck>
+    </TouchableOpacity>
   )
 
   render() {
-    const { data } = this.state
+    const { decks } = this.props
+    const listDecks = Object.keys(decks).map((key) => {
+      const { title, questions } = decks[key]
+      return {
+        title,
+        questions,
+        key: title,
+      }
+    })
 
     return (
-      <DeckContainer
-        data={data}
-        renderItem={this.renderDeck}
-      />
+      <View style={{ flex: 1 }}>
+        {
+        listDecks.length !== 0 &&
+          <View style={{ flex: 1, borderWidth: 2, borderColor: 'black' }}>
+            <DeckContainer
+              data={listDecks}
+              renderItem={this.renderDeck}
+            />
+          </View>
+      }
+      </View>
     )
   }
 }
 
-export default DeckListView
+DeckListView.propTypes = {
+  decks: PropTypes.object.isRequired,
+}
+
+function mapStateToProps(state) {
+  return {
+    decks: state,
+  }
+}
+
+export default connect(mapStateToProps)(DeckListView)
