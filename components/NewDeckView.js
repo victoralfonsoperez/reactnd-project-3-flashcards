@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { Text, TextInput, Platform } from 'react-native'
+import { Text, TextInput, Platform, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import { green, white, blue, lightblue, gray } from '../utils/colors'
 import * as actions from '../actions'
-import { saveDeckTitle, getDecks } from '../utils/helpers'
+import { saveDeckTitle } from '../utils/helpers'
 
 const NewDeck = styled.KeyboardAvoidingView`
   align-items: center;
@@ -24,6 +25,20 @@ const SubmitBtn = styled.TouchableOpacity`
   width: 120px;
 `
 
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    alignSelf: 'stretch',
+    borderColor: Platform.OS === 'ios' ? blue : 'transparent',
+    borderWidth: Platform.OS === 'ios' ? 2 : 0,
+    borderRadius: Platform.OS === 'ios' ? 6 : 0,
+    marginTop: 20,
+    color: lightblue,
+    padding: 10,
+    fontSize: 16,
+  },
+})
+
 class DeckListView extends Component {
   state ={
     text: '',
@@ -31,18 +46,18 @@ class DeckListView extends Component {
 
   submitDeck() {
     const { text } = this.state
-    //removes whitespaces
+    // removes whitespaces
     const obj = {
       title: text.replace(/\s/g, ''),
       questions: [],
     }
-    //clears the imput once you click the button
+    // clears the imput once you click the button
     this._textInput.setNativeProps({ text: '' })
-    //updates DB
+    // updates DB
     saveDeckTitle(text, obj)
-    //updates redux
+    // updates redux
     this.props.addDeck(obj)
-    //navigates back to the previous page
+    // navigates back to the previous page
     this.props.navigation.goBack()
   }
 
@@ -53,18 +68,7 @@ class DeckListView extends Component {
 
         <TextInput
           ref={component => this._textInput = component}
-          style={
-            {
-              height: 40,
-              alignSelf: 'stretch',
-              borderColor: Platform.OS === 'ios' ? blue : 'transparent',
-              borderWidth: Platform.OS === 'ios' ? 2 : 0,
-              borderRadius: Platform.OS === 'ios' ? 6 : 0,
-              marginTop: 20,
-              color: lightblue,
-              padding: 10,
-              fontSize: 16,
-            }}
+          style={styles.input}
           autoFocus
           placeholderTextColor={gray}
           placeholder="Deck Title"
@@ -79,6 +83,11 @@ class DeckListView extends Component {
       </NewDeck>
     )
   }
+}
+
+DeckListView.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  addDeck: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {

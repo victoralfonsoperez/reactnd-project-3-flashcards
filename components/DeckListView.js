@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { white, gray, lightblue, darkgreen, blue, black } from '../utils/colors'
-import { setDecks, getDecks } from '../utils/helpers'
+import { getDecks } from '../utils/helpers'
 import { fetchDecks } from '../actions'
 
 const styles = StyleSheet.create({
@@ -41,6 +41,14 @@ const DeckContainer = styled.FlatList`
   background-color: ${gray};
 `
 
+const ErrorText = styled.Text`
+  flex: 1;
+  padding: 40px;
+  text-align: center;
+  font-size: 24px;
+  color: ${lightblue};
+`
+
 function Item({ title, questions }) {
   return (
     <TouchableOpacity key={title}>
@@ -55,12 +63,18 @@ function Item({ title, questions }) {
 }
 
 class DeckListView extends Component {
+  state = {
+    ready: false,
+  }
+
   componentDidMount() {
     const { dispatch } = this.props
 
     getDecks()
       .then(result => JSON.parse(result))
       .then(result => dispatch(fetchDecks(result)))
+      .then(() => this.setState({ ready: true }))
+      .catch(error => console.warn('error getting the data from the DB', error))
   }
 
   renderDeck = ({ item }) => (
@@ -81,7 +95,15 @@ class DeckListView extends Component {
     return (
       <View style={{ flex: 1 }}>
         {
-        listDecks.length !== 0 &&
+          !this.state.ready &&
+          <ActivityIndicator style={{ marginTop: 35 }} />
+        }
+        {
+          this.state.ready && listDecks.length === 0 &&
+          <ErrorText>THERE ARE NO DECKS YET, CREATE ONE!</ErrorText>
+        }
+        {
+          this.state.ready && listDecks.length !== 0 &&
           <View style={{ flex: 1 }}>
             <DeckContainer
               data={listDecks}
@@ -96,6 +118,12 @@ class DeckListView extends Component {
 
 DeckListView.propTypes = {
   decks: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+}
+
+Item.propTypes = {
+  title: PropTypes.string.isRequired,
+  questions: PropTypes.array.isRequired,
 }
 
 function mapStateToProps(state) {

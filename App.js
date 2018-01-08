@@ -5,9 +5,10 @@ import { Constants } from 'expo'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import styled from 'styled-components/native'
+import { FontAwesome } from '@expo/vector-icons'
 import DeckListView from './components/DeckListView'
 import NewDeckView from './components/NewDeckView'
-import { blue } from './utils/colors'
+import { blue, green, white, gray } from './utils/colors'
 import reducer from './reducers'
 
 const CustomStatusBar = styled.View`
@@ -21,20 +22,33 @@ const FlashCardsStatusBar = () => (
   </CustomStatusBar>
 )
 
-const Tabs = TabNavigator({
-  Decks: {
-    screen: DeckListView,
-    navigationOptions: {
-      tabBarLabel: 'List of Decks',
+const Tabs = TabNavigator(
+  {
+    Decks: {
+      screen: DeckListView,
+      navigationOptions: {
+        tabBarLabel: 'List of Decks',
+        tabBarIcon: ({ tintColor }) => (<FontAwesome name="th-list" size={30} color={tintColor} />),
+      },
+    },
+    NewDeckView: {
+      screen: NewDeckView,
+      navigationOptions: {
+        tabBarLabel: 'New Deck',
+        tabBarIcon: ({ tintColor }) => (<FontAwesome name="plus-square" size={30} color={tintColor} />),
+      },
     },
   },
-  NewDeckView: {
-    screen: NewDeckView,
-    navigationOptions: {
-      tabBarLabel: 'New Deck',
+  {
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: white,
+      inactiveTintColor: gray,
+      activeBackgroundColor: green,
+      inactiveBackgroundColor: white,
     },
   },
-})
+)
 
 const store = createStore(reducer)
 
