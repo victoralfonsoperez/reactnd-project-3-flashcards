@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TabNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import { View, StatusBar } from 'react-native'
 import { Constants } from 'expo'
 import { createStore } from 'redux'
@@ -8,6 +8,8 @@ import styled from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import DeckListView from './components/DeckListView'
 import NewDeckView from './components/NewDeckView'
+import DeckView from './components/DeckView'
+import NewQuestionView from './components/NewQuestionView'
 import { blue, green, white, gray } from './utils/colors'
 import reducer from './reducers'
 
@@ -28,14 +30,18 @@ const Tabs = TabNavigator(
       screen: DeckListView,
       navigationOptions: {
         tabBarLabel: 'List of Decks',
-        tabBarIcon: ({ tintColor }) => (<FontAwesome name="th-list" size={30} color={tintColor} />),
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome name="th-list" size={30} color={tintColor} />
+        ),
       },
     },
     NewDeckView: {
       screen: NewDeckView,
       navigationOptions: {
         tabBarLabel: 'New Deck',
-        tabBarIcon: ({ tintColor }) => (<FontAwesome name="plus-square" size={30} color={tintColor} />),
+        tabBarIcon: ({ tintColor }) => (
+          <FontAwesome name="plus-square" size={30} color={tintColor} />
+        ),
       },
     },
   },
@@ -50,6 +56,34 @@ const Tabs = TabNavigator(
   },
 )
 
+const MainNav = StackNavigator({
+  Home: {
+    screen: Tabs,
+  },
+  DeckView: {
+    screen: DeckView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green,
+        height: Constants.statusBarHeight,
+        padding: 20,
+      },
+    },
+  },
+  NewQuestionView: {
+    screen: NewQuestionView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green,
+        height: Constants.statusBarHeight,
+        padding: 20,
+      },
+    },
+  },
+})
+
 const store = createStore(reducer)
 
 class App extends Component {
@@ -58,7 +92,7 @@ class App extends Component {
       <Provider store={store}>
         <View style={{ flex: 1 }}>
           <FlashCardsStatusBar />
-          <Tabs />
+          <MainNav />
         </View>
       </Provider>
     )

@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 
 const DeckContainer = styled.FlatList`
   flex: 1;
-  padding: 20px 0 40px 0;
+  padding: 0 0 40px 0;
   background-color: ${gray};
 `
 
@@ -48,19 +48,6 @@ const ErrorText = styled.Text`
   font-size: 24px;
   color: ${lightblue};
 `
-
-function Item({ title, questions }) {
-  return (
-    <TouchableOpacity key={title}>
-      <View style={styles.deck}>
-        <Text style={styles.deckTitle}>{title.toUpperCase()}</Text>
-        <Text style={styles.deckCardNumber}>
-          {`${questions.length} ${questions.length === 1 ? 'CARD' : 'CARDS'}`}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  )
-}
 
 class DeckListView extends Component {
   state = {
@@ -77,9 +64,21 @@ class DeckListView extends Component {
       .catch(error => console.warn('error getting the data from the DB', error))
   }
 
-  renderDeck = ({ item }) => (
-    <Item {...item} />
-  )
+  renderDeck = ({ item }) => {
+    return (
+      <TouchableOpacity key={item.title} onPress={() => this.props.navigation.navigate(
+          'DeckView',
+          { title: item.title, questions: item.questions }
+        )}>
+        <View style={styles.deck}>
+          <Text style={styles.deckTitle}>{item.title.toUpperCase()}</Text>
+          <Text style={styles.deckCardNumber}>
+            {`${item.questions && item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 
   render() {
     const { decks } = this.props
@@ -119,11 +118,6 @@ class DeckListView extends Component {
 DeckListView.propTypes = {
   decks: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-}
-
-Item.propTypes = {
-  title: PropTypes.string.isRequired,
-  questions: PropTypes.array.isRequired,
 }
 
 function mapStateToProps(state) {
