@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { View, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import { white, gray, lightblue, darkgreen, blue, black } from '../utils/colors'
+import { white, gray, lightblue, darkgreen, black } from '../utils/colors'
 import { getDecks } from '../utils/helpers'
 import { fetchDecks } from '../actions'
 
@@ -64,21 +64,22 @@ class DeckListView extends Component {
       .catch(error => console.warn('error getting the data from the DB', error))
   }
 
-  renderDeck = ({ item }) => {
-    return (
-      <TouchableOpacity key={item.title} onPress={() => this.props.navigation.navigate(
+  renderDeck = ({ item }) => (
+    <TouchableOpacity
+      key={item.title}
+      onPress={() => this.props.navigation.navigate(
           'DeckView',
-          { title: item.title, questions: item.questions }
-        )}>
-        <View style={styles.deck}>
-          <Text style={styles.deckTitle}>{item.title.toUpperCase()}</Text>
-          <Text style={styles.deckCardNumber}>
-            {`${item.questions && item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    )
-  }
+          { title: item.title, questions: item.questions },
+        )}
+    >
+      <View style={styles.deck}>
+        <Text style={styles.deckTitle}>{item.title.toUpperCase()}</Text>
+        <Text style={styles.deckCardNumber}>
+          {`${item.questions && item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
 
   render() {
     const { decks } = this.props
@@ -118,6 +119,7 @@ class DeckListView extends Component {
 DeckListView.propTypes = {
   decks: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {

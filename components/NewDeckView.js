@@ -46,19 +46,23 @@ class DeckListView extends Component {
 
   submitDeck() {
     const { text } = this.state
-    // removes whitespaces
-    const obj = {
-      title: text.replace(/\s/g, ''),
-      questions: [],
+
+    if (text === '') {
+      alert("Please fill the deck name")
+    } else {
+      const obj = {
+        title: text,
+        questions: [],
+      }
+      // clears the imput once you click the button
+      this._textInput.setNativeProps({ text: '' })
+      // updates DB
+      saveDeckTitle(text.replace(/\s/g, ''), obj)
+      // updates redux
+      this.props.addDeck(obj)
+      // navigates back to the previous page
+      this.props.navigation.goBack()
     }
-    // clears the imput once you click the button
-    this._textInput.setNativeProps({ text: '' })
-    // updates DB
-    saveDeckTitle(text, obj)
-    // updates redux
-    this.props.addDeck(obj)
-    // navigates back to the previous page
-    this.props.navigation.goBack()
   }
 
   render() {

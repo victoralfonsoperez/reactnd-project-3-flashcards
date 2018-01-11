@@ -1,30 +1,33 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
+import PropTypes from 'prop-types'
 
 class DeckView extends Component {
   static navigationOptions = ({ navigation }) => {
     const { title } = navigation.state.params
 
     return {
-      title: title
+      title,
     }
   }
 
   render() {
+    const { title, questions } = this.props.navigation.state.params
+
     return (
       <View>
         <Text>
-          {this.props.navigation.state.params.title}
+          {title}
         </Text>
         <Text>
           {
-            this.props.navigation.state.params.questions && this.props.navigation.state.params.questions.map(question => (
+            questions && questions.map(item => (
               <View>
                 <Text>
-                  question.question
+                  item.question
                 </Text>
                 <Text>
-                  question.answer
+                  item.answer
                 </Text>
               </View>
             ))
@@ -33,6 +36,10 @@ class DeckView extends Component {
       </View>
     )
   }
+}
+
+DeckView.propTypes = {
+  navigation: PropTypes.object.isRequired,
 }
 
 export default DeckView
