@@ -1,27 +1,72 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
+import styled from 'styled-components/native'
 import PropTypes from 'prop-types'
+import { green, white, blue, lightblue, gray, black } from '../utils/colors'
+
+const DeckContainer = styled.View`
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  padding: 30px;
+`
+
+const DeckTitle = styled.Text`
+  color: ${black};
+  font-size: 36;
+  padding: 20px;
+`
+
+const DeckCardsAmount = styled.Text`
+  color: ${lightblue};
+  font-size: 20;
+  margin-bottom: 20px;
+`
+
+const AddCard = styled.TouchableOpacity`
+  align-items: center;    
+  background-color: ${white};
+  border-radius: 50px;
+  justify-content: center;
+  margin: 10px 0;
+  padding: 16px;
+  width: 160px;
+`
+
+const StartQuiz = styled.TouchableOpacity`
+  align-items: center;    
+  background-color: ${blue};
+  border-radius: 50px;
+  justify-content: center;
+  margin: 10px 0;
+  padding: 16px;
+  width: 160px;
+`
 
 class DeckView extends Component {
   static navigationOptions = ({ navigation }) => {
-    const { title } = navigation.state.params
+    const { deck } = navigation.state.params
 
     return {
-      title,
+      title: deck.title,
     }
   }
 
   render() {
-    const { title, questions } = this.props.navigation.state.params
+    const { deck } = this.props.navigation.state.params
 
     return (
-      <View>
-        <Text>
-          {title}
-        </Text>
+      <DeckContainer>
+        <DeckTitle>
+          {deck.title}
+        </DeckTitle>
+        <DeckCardsAmount>
+          {`${deck.questions.length} cards`}
+        </DeckCardsAmount>
+
         <Text>
           {
-            questions && questions.map(item => (
+            deck.questions && deck.questions.map(item => (
               <View>
                 <Text>
                   item.question
@@ -33,7 +78,15 @@ class DeckView extends Component {
             ))
           }
         </Text>
-      </View>
+        <AddCard>
+          <Text style={{ color: blue, fontSize: 18 }}>Add Card</Text>
+        </AddCard>
+
+        <StartQuiz>
+          <Text style={{ color: white, fontSize: 18 }}>Start Quiz</Text>
+        </StartQuiz>
+
+      </DeckContainer>
     )
   }
 }
