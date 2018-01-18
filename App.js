@@ -8,6 +8,7 @@ import styled from 'styled-components/native'
 import { FontAwesome } from '@expo/vector-icons'
 import DeckListView from './components/DeckListView'
 import NewDeckView from './components/NewDeckView'
+import QuizView from './components/QuizView'
 import DeckView from './components/DeckView'
 import NewQuestionView from './components/NewQuestionView'
 import { blue, green, white, gray } from './utils/colors'
@@ -73,6 +74,17 @@ const MainNav = StackNavigator({
   },
   NewQuestionView: {
     screen: NewQuestionView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: green,
+        height: Constants.statusBarHeight,
+        padding: 20,
+      },
+    },
+  },
+  QuizView: {
+    screen: QuizView,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {

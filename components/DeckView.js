@@ -52,8 +52,14 @@ class DeckView extends Component {
     }
   }
 
+  state = {
+    addCard: 'Add Card',
+    startQuiz: 'Start Quiz',
+  }
+
   render() {
     const { deck } = this.props.navigation.state.params
+    const { addCard, startQuiz } = this.state
 
     return (
       <DeckContainer>
@@ -69,21 +75,21 @@ class DeckView extends Component {
             deck.questions && deck.questions.map(item => (
               <View>
                 <Text>
-                  item.question
+                  {item.question}
                 </Text>
                 <Text>
-                  item.answer
+                  {item.answer}
                 </Text>
               </View>
             ))
           }
         </Text>
-        <AddCard>
-          <Text style={{ color: blue, fontSize: 18 }}>Add Card</Text>
+        <AddCard onPress={() => this.props.navigation.navigate('NewQuestionView', { addCard })}>
+          <Text style={{ color: blue, fontSize: 18 }}>{addCard}</Text>
         </AddCard>
 
-        <StartQuiz>
-          <Text style={{ color: white, fontSize: 18 }}>Start Quiz</Text>
+        <StartQuiz onPress={() => this.props.navigation.navigate('QuizView', { title: 'Quiz' })}>
+          <Text style={{ color: white, fontSize: 18 }}>{startQuiz}</Text>
         </StartQuiz>
 
       </DeckContainer>

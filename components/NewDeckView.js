@@ -22,7 +22,7 @@ const SubmitBtn = styled.TouchableOpacity`
   justify-content: center;
   margin-top: 20px;
   padding: 10px;
-  width: 120px;
+  width: 160px;
 `
 
 const styles = StyleSheet.create({
@@ -60,13 +60,8 @@ class DeckListView extends Component {
       saveDeckTitle(text.replace(/\s/g, ''), deck)
       // updates redux
       this.props.addDeck(deck)
-      // navigates back to the previous page
-      this.props.navigation.goBack()
-
-      this.props.navigation.navigate(
-        'DeckView',
-        { deck },
-      )
+      // navigates back to the NewDeckView View
+      this.props.navigation.navigate('NewDeckView', { deck })
     }
   }
 
