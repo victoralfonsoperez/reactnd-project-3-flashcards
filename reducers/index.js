@@ -18,13 +18,16 @@ function decks(state = {}, action) {
     case ADD_DECK:
       return {
         ...state,
-        [deck]: {
-          title: deck,
+        [action.deck]: {
+          title: action.deck,
           questions: [],
         },
       }
     case ADD_CARD:
-    const { deck, question, answer, correct } = card
+    const { deck,
+      question,
+      answer,
+      correct } = card
       return {
         ...state,
         [deck]: {

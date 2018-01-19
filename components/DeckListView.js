@@ -72,7 +72,7 @@ class DeckListView extends Component {
         )}
     >
       <View style={styles.deck}>
-        <Text style={styles.deckTitle}>{item.title.toUpperCase()}</Text>
+        <Text style={styles.deckTitle}>{item && item.title}</Text>
         <Text style={styles.deckCardNumber}>
           {`${item.questions && item.questions.length} ${item.questions.length === 1 ? 'CARD' : 'CARDS'}`}
         </Text>
@@ -121,10 +121,6 @@ DeckListView.propTypes = {
   navigation: PropTypes.object.isRequired,
 }
 
-function mapStateToProps(state) {
-  return {
-    decks: state,
-  }
-}
+const mapStateToProps = decks => ({ decks })
 
 export default connect(mapStateToProps)(DeckListView)

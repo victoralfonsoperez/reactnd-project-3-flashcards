@@ -89,11 +89,7 @@ class DeckView extends Component {
   }
 }
 
-function mapStateToProps(decks) {
-  return {
-    decks,
-  }
-}
+const mapStateToProps = decks => ({ decks })
 
 DeckView.propTypes = {
   navigation: PropTypes.object.isRequired,

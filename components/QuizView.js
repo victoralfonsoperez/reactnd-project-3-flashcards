@@ -235,11 +235,7 @@ class QuizView extends Component {
   }
 }
 
-function mapStateToProps(decks) {
-  return {
-    decks,
-  }
-}
+const mapStateToProps = decks => ({ decks })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(actions, dispatch)
