@@ -9,12 +9,12 @@ const initialDecks = {
       {
         question: 'What is React?',
         answer: 'A library for managing user interfaces',
-        correct: true,
+        correct: 'true',
       },
       {
         question: 'Where do you make Ajax requests in React?',
         answer: 'The componentDidMount lifecycle event',
-        correct: true,
+        correct: 'true',
       },
     ],
   },
@@ -24,7 +24,7 @@ const initialDecks = {
       {
         question: 'What is a closure?',
         answer: 'The combination of a function and the lexical environment within which that function was declared.',
-        correct: true,
+        correct: 'true',
       },
     ],
   },

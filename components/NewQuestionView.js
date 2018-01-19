@@ -71,6 +71,8 @@ class NewQuestionView extends Component {
         correct,
         deck,
       })
+      // sets the state to its initial values
+      this.setState({ question: '', answer: '', correct: '' })
       // navigates back to the previous page
       this.props.navigation.goBack()
     }
@@ -93,6 +95,13 @@ class NewQuestionView extends Component {
           placeholderTextColor={gray}
           placeholder="Answer"
           onChangeText={answer => this.setState({ answer })}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={gray}
+          placeholder="True or false"
+          onChangeText={correct => this.setState({ correct })}
         />
 
         <SubmitBtn

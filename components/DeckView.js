@@ -77,7 +77,7 @@ class DeckView extends Component {
           <Text style={{ color: blue, fontSize: 18 }}>{addCard}</Text>
         </AddCard>
 
-        <StartQuiz onPress={() => this.props.navigation.navigate('Quiz', { title: 'Quiz' })}>
+        <StartQuiz onPress={() => this.props.navigation.navigate('Quiz', { title })}>
           <Text style={{ color: white, fontSize: 18 }}>{startQuiz}</Text>
         </StartQuiz>
 
