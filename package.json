@@ -24,13 +24,14 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "auth0": "^2.9.1",
     "auth0-js": "^9.0.2",
     "babel-eslint": "^8.1.2",
     "expo": "^23.0.4",
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "0.50.3",
-    "react-navigation": "^1.0.0-beta.23",
+    "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "styled-components": "^2.4.0"

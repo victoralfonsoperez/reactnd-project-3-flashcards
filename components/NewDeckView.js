@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: Platform.OS === 'ios' ? 6 : 0,
     marginTop: 20,
     color: lightblue,
+    backgroundColor: white,
     padding: 10,
     fontSize: 16,
   },
@@ -48,6 +49,7 @@ class DeckListView extends Component {
     const { text } = this.state
 
     if (text === '') {
+      // prevents the users from create an empty title deck
       alert('Please fill the deck name')
     } else {
       // updates DB
@@ -55,7 +57,7 @@ class DeckListView extends Component {
       // updates redux
       this.props.addDeck(text)
       // navigates back to the NewDeckView View
-      this.props.navigation.navigate('Deck', { text })
+      this.props.navigation.navigate('Deck', { title: text })
       // clears the imput once you click the button
       this.setState({ text: '' })
     }

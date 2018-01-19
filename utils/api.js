@@ -51,3 +51,14 @@ export function saveDeckTitle(title) {
     },
   }))
 }
+
+export function addCard(title, card) {
+  return AsyncStorage.getItem(FLASHCARD_STORAGE_KEY)
+    .then(results => JSON.parse(results))
+    .then((results) => {
+      results[title].questions.push(card)
+      AsyncStorage.setItem(FLASHCARD_STORAGE_KEY, JSON.stringify(results))
+
+      return results
+    })
+}

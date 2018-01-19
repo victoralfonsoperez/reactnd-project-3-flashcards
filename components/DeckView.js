@@ -73,7 +73,7 @@ class DeckView extends Component {
           <Text>{`${questions && questions.length} cards`}</Text>
         </DeckCardsAmount>
 
-        <AddCard onPress={() => this.props.navigation.navigate('AddQuestion', { addCard })}>
+        <AddCard onPress={() => this.props.navigation.navigate('AddQuestion', { addCard, title })}>
           <Text style={{ color: blue, fontSize: 18 }}>{addCard}</Text>
         </AddCard>
 

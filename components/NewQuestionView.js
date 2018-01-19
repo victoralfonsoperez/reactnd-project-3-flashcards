@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import * as actions from '../actions'
 import { green, white, blue, lightblue, gray } from '../utils/colors'
+import { addCard } from '../utils/api'
 
 const CardContainer = styled.KeyboardAvoidingView`
   align-items: center;
@@ -52,28 +53,32 @@ class NewQuestionView extends Component {
   state = {
     question: '',
     answer: '',
+    correct: '',
   }
 
-  submitCard() {
-    const { question, answer } = this.state
+  submitCard(deck) {
+    const { question, answer, correct } = this.state
 
     if (question === '' || answer === '') {
       alert('The fields are required')
     } else {
-      const card = {
+      // updates DB
+      addCard(deck, { question, answer, correct })
+      // updates redux
+      this.props.addCard({
         question,
         answer,
-      }
-      // updates DB
-      //saveDeckTitle(text.replace(/\s/g, ''), deck)
-      // updates redux
-      //this.props.addDeck(deck)
+        correct,
+        deck,
+      })
       // navigates back to the previous page
       this.props.navigation.goBack()
     }
   }
 
   render() {
+    const { title } = this.props.navigation.state.params
+
     return (
       <CardContainer behavior="padding">
         <TextInput
@@ -91,7 +96,7 @@ class NewQuestionView extends Component {
         />
 
         <SubmitBtn
-          onPress={() => this.submitCard()}
+          onPress={() => this.submitCard(title)}
         >
           <Text style={{ color: white }}>SUBMIT</Text>
         </SubmitBtn>
@@ -102,6 +107,7 @@ class NewQuestionView extends Component {
 
 NewQuestionView.propTypes = {
   navigation: PropTypes.object.isRequired,
+  addCard: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {
