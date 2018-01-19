@@ -13,6 +13,7 @@ import DeckView from './components/DeckView'
 import NewQuestionView from './components/NewQuestionView'
 import { blue, green, white, gray } from './utils/colors'
 import reducer from './reducers'
+import setNotification from './utils/helpers'
 
 const CustomStatusBar = styled.View`
   backgroundColor: ${blue};
@@ -99,6 +100,10 @@ const MainNav = StackNavigator({
 const store = createStore(reducer)
 
 class App extends Component {
+  componentDidMount() {
+    setNotification()
+  }
+
   render() {
     return (
       <Provider store={store}>

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native
 import styled from 'styled-components/native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import * as actions from '../actions'
 import { green, white, blue, lightblue, gray, black, red } from '../utils/colors'
 
@@ -42,6 +43,12 @@ const QuizContainer = styled.View`
   padding: 20px 40px 20px 40px;
 `
 
+const ResultsContainer = styled.View`
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  padding: 20px 40px 20px 40px;
+`
 const QuestionNumber = styled.Text`
   align-self: flex-start;
   color: ${black};
@@ -61,6 +68,26 @@ const Correct = styled.TouchableOpacity`
 const Incorrect = styled.TouchableOpacity`
   align-items: center;    
   background-color: ${red};
+  border-radius: 50px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  width: 160px;
+`
+
+const Repeat = styled.TouchableOpacity`
+  align-items: center;    
+  background-color: ${green};
+  border-radius: 50px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  width: 160px;
+`
+
+const Back = styled.TouchableOpacity`
+  align-items: center;    
+  background-color: ${blue};
   border-radius: 50px;
   justify-content: center;
   margin-top: 20px;
@@ -105,12 +132,17 @@ class QuizView extends Component {
     const { decks } = this.props
     const valid = decks[title].questions[questionNumber].correct
 
-    valid === answer ?
+    if (valid.toLowerCase() === answer.toLowerCase()) {
       this.setState({ correct: this.state.correct + 1 })
-      :
-      this.setState({ correct: this.state.incorrect + 1 })
+    } else {
+      this.setState({ incorrect: this.state.incorrect + 1 })
+    }
 
     this.setState({ questionNumber: this.state.questionNumber + 1 })
+  }
+
+  retryQuiz() {
+    this.setState({ questionNumber: 0, correct: 0, incorrect: 0 })
   }
 
   flipCard() {
@@ -131,6 +163,8 @@ class QuizView extends Component {
 
   render() {
     const { title } = this.props.navigation.state.params
+    const { questionNumber, correct } = this.state
+    const { decks } = this.props
 
     const frontAnimatedStyle = {
       transform: [
@@ -147,16 +181,16 @@ class QuizView extends Component {
     return (
       <QuizContainer>
         {
-        this.state.questionNumber !== this.props.decks[title].questions.length &&
+        questionNumber !== decks[title].questions.length &&
         <View>
-          <QuestionNumber>2/2</QuestionNumber>
+          <QuestionNumber>{`${questionNumber + 1}/${decks[title].questions.length}`}</QuestionNumber>
           <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
             <View style={styles.container}>
               <Animated.View style={[styles.front, frontAnimatedStyle]}>
-                <Text style={styles.text}>Does react native work with android</Text>
+                <Text style={styles.text}>{decks[title].questions[questionNumber].question}</Text>
               </Animated.View>
               <Animated.View style={[styles.front, styles.back, backAnimatedStyle]}>
-                <Text style={styles.text}>Yes it does</Text>
+                <Text style={styles.text}>{decks[title].questions[questionNumber].answer}</Text>
               </Animated.View>
             </View>
 
@@ -176,10 +210,20 @@ class QuizView extends Component {
         </View>
       }
         {
-        this.state.questionNumber === this.props.decks[title].questions.length &&
-        <View>
-          <Text>{this.state.questionNumber}</Text>
-        </View>
+        questionNumber === decks[title].questions.length &&
+        <ResultsContainer>
+          <Text style={{ fontSize: 24, padding: 10, color: black }}>You have got</Text>
+          <Text style={{ fontSize: 30, padding: 10, color: blue }}>{`${(correct * 100) / decks[title].questions.length}%`}</Text>
+          <Text style={{ fontSize: 24, padding: 10, color: black }}>Correct answers</Text>
+
+          <Repeat onPress={() => this.retryQuiz()}>
+            <Text style={{ color: white, fontSize: 20 }}>Try Again</Text>
+          </Repeat>
+
+          <Back onPress={() => this.props.navigation.goBack()}>
+            <Text style={{ color: white, fontSize: 20 }}>Go Back</Text>
+          </Back>
+        </ResultsContainer>
       }
       </QuizContainer>
     )
@@ -195,5 +239,10 @@ function mapStateToProps(decks) {
 const mapDispatchToProps = dispatch => (
   bindActionCreators(actions, dispatch)
 )
+
+QuizView.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  decks: PropTypes.object.isRequired,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizView)
