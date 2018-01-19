@@ -24,11 +24,12 @@ function decks(state = {}, action) {
         },
       }
     case ADD_CARD:
+    const { deck, question, answer, correct } = card
       return {
         ...state,
-        [card.deck]: {
-          ...state[card.deck],
-          questions: [...state[card.deck].questions, { question, answer, correct }],
+        [deck]: {
+          ...state[deck],
+          questions: [...state[deck].questions, { question, answer, correct }],
         },
       }
     default:

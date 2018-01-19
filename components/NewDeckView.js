@@ -91,11 +91,7 @@ DeckListView.propTypes = {
   addDeck: PropTypes.func.isRequired,
 }
 
-function mapStateToProps(state) {
-  return {
-    decks: state,
-  }
-}
+const mapStateToProps = decks => ({ decks })
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators(actions, dispatch)

@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
       width: 1,
       height: 3,
     },
+    width: 250,
   },
   front: {
     backfaceVisibility: 'hidden',
@@ -124,6 +125,10 @@ class QuizView extends Component {
       inputRange: [0, 180],
       outputRange: ['180deg', '360deg'],
     })
+  }
+
+  componentWillUnmount() {
+    this.animatedValue.removeAllListeners()
   }
 
   onAnswerSelected = (answer) => {

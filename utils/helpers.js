@@ -3,21 +3,19 @@ import { Notifications, Permissions } from 'expo'
 
 const NOTIFICATION_KEY = 'flashcards: notification'
 
-function createNotification() {
-  return {
-    title: 'Study, study',
-    body: "👋 Don't forget to do study today!",
-    ios: {
-      sound: true,
-    },
-    android: {
-      sound: true,
-      priority: 'high',
-      sticky: false,
-      vibrate: true,
-    },
-  }
-}
+const createNotification = () => ({
+  title: 'Study, study',
+  body: "👋 Don't forget to do study today!",
+  ios: {
+    sound: true,
+  },
+  android: {
+    sound: true,
+    priority: 'high',
+    sticky: false,
+    vibrate: true,
+  },
+})
 
 export default function setNotification() {
   AsyncStorage.getItem(NOTIFICATION_KEY)
