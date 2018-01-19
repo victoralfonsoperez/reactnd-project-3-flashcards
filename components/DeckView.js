@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { Text } from 'react-native'
+import { connect } from 'react-redux'
 import styled from 'styled-components/native'
 import PropTypes from 'prop-types'
-import { green, white, blue, lightblue, gray, black } from '../utils/colors'
+import { white, blue, lightblue, black } from '../utils/colors'
 
 const DeckContainer = styled.View`
   align-items: center;
@@ -45,10 +46,10 @@ const StartQuiz = styled.TouchableOpacity`
 
 class DeckView extends Component {
   static navigationOptions = ({ navigation }) => {
-    const { deck } = navigation.state.params
+    const { title } = navigation.state.params
 
     return {
-      title: deck.title,
+      title,
     }
   }
 
@@ -58,37 +59,25 @@ class DeckView extends Component {
   }
 
   render() {
-    const { deck } = this.props.navigation.state.params
+    const { title } = this.props.navigation.state.params
+    const { decks } = this.props
     const { addCard, startQuiz } = this.state
+    const { questions } = decks[title]
 
     return (
       <DeckContainer>
         <DeckTitle>
-          {deck.title}
+          {title}
         </DeckTitle>
         <DeckCardsAmount>
-          {`${deck.questions.length} cards`}
+          <Text>{`${questions && questions.length} cards`}</Text>
         </DeckCardsAmount>
 
-        <Text>
-          {
-            deck.questions && deck.questions.map(item => (
-              <View>
-                <Text>
-                  {item.question}
-                </Text>
-                <Text>
-                  {item.answer}
-                </Text>
-              </View>
-            ))
-          }
-        </Text>
-        <AddCard onPress={() => this.props.navigation.navigate('NewQuestionView', { addCard })}>
+        <AddCard onPress={() => this.props.navigation.navigate('AddQuestion', { addCard })}>
           <Text style={{ color: blue, fontSize: 18 }}>{addCard}</Text>
         </AddCard>
 
-        <StartQuiz onPress={() => this.props.navigation.navigate('QuizView', { title: 'Quiz' })}>
+        <StartQuiz onPress={() => this.props.navigation.navigate('Quiz', { title: 'Quiz' })}>
           <Text style={{ color: white, fontSize: 18 }}>{startQuiz}</Text>
         </StartQuiz>
 
@@ -97,8 +86,15 @@ class DeckView extends Component {
   }
 }
 
-DeckView.propTypes = {
-  navigation: PropTypes.object.isRequired,
+function mapStateToProps(decks) {
+  return {
+    decks,
+  }
 }
 
-export default DeckView
+DeckView.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  decks: PropTypes.object.isRequired,
+}
+
+export default connect(mapStateToProps)(DeckView)

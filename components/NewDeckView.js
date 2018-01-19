@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import { green, white, blue, lightblue, gray } from '../utils/colors'
 import * as actions from '../actions'
-import { saveDeckTitle } from '../utils/helpers'
+import { saveDeckTitle } from '../utils/api'
 
 const NewDeck = styled.KeyboardAvoidingView`
   align-items: center;
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 })
 
 class DeckListView extends Component {
-  state ={
+  state = {
     text: '',
   }
 
@@ -50,18 +50,14 @@ class DeckListView extends Component {
     if (text === '') {
       alert('Please fill the deck name')
     } else {
-      const deck = {
-        title: text,
-        questions: [],
-      }
-      // clears the imput once you click the button
-      this._textInput.setNativeProps({ text: '' })
       // updates DB
-      saveDeckTitle(text.replace(/\s/g, ''), deck)
+      saveDeckTitle(text.replace(/\s/g, ''))
       // updates redux
-      this.props.addDeck(deck)
+      this.props.addDeck(text)
       // navigates back to the NewDeckView View
-      this.props.navigation.navigate('NewDeckView', { deck })
+      this.props.navigation.navigate('Deck', { text })
+      // clears the imput once you click the button
+      this.setState({ text: '' })
     }
   }
 
@@ -71,7 +67,6 @@ class DeckListView extends Component {
         <Text style={{ fontSize: 24, color: green }}>What is the title of your new deck?</Text>
 
         <TextInput
-          ref={component => this._textInput = component}
           style={styles.input}
           autoFocus
           placeholderTextColor={gray}

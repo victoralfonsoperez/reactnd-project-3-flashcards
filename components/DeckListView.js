@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { View, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { white, gray, lightblue, darkgreen, black } from '../utils/colors'
-import { getDecks } from '../utils/helpers'
+import { getDecks } from '../utils/api'
 import { fetchDecks } from '../actions'
 
 const styles = StyleSheet.create({
@@ -58,7 +58,6 @@ class DeckListView extends Component {
     const { dispatch } = this.props
 
     getDecks()
-      .then(result => JSON.parse(result))
       .then(result => dispatch(fetchDecks(result)))
       .then(() => this.setState({ ready: true }))
       .catch(error => console.warn('error getting the data from the DB', error))
@@ -68,8 +67,8 @@ class DeckListView extends Component {
     <TouchableOpacity
       key={item.title}
       onPress={() => this.props.navigation.navigate(
-          'DeckView',
-          { deck: item },
+          'Deck',
+          { title: item.title },
         )}
     >
       <View style={styles.deck}>

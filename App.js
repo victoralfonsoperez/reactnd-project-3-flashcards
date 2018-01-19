@@ -27,7 +27,7 @@ const FlashCardsStatusBar = () => (
 
 const Tabs = TabNavigator(
   {
-    Decks: {
+    DeckList: {
       screen: DeckListView,
       navigationOptions: {
         tabBarLabel: 'List of Decks',
@@ -36,7 +36,7 @@ const Tabs = TabNavigator(
         ),
       },
     },
-    NewDeckView: {
+    AddDeck: {
       screen: NewDeckView,
       navigationOptions: {
         tabBarLabel: 'New Deck',
@@ -61,7 +61,7 @@ const MainNav = StackNavigator({
   Home: {
     screen: Tabs,
   },
-  DeckView: {
+  Deck: {
     screen: DeckView,
     navigationOptions: {
       headerTintColor: white,
@@ -72,7 +72,7 @@ const MainNav = StackNavigator({
       },
     },
   },
-  NewQuestionView: {
+  AddQuestion: {
     screen: NewQuestionView,
     navigationOptions: {
       headerTintColor: white,
@@ -83,7 +83,7 @@ const MainNav = StackNavigator({
       },
     },
   },
-  QuizView: {
+  Quiz: {
     screen: QuizView,
     navigationOptions: {
       headerTintColor: white,
